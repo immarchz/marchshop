@@ -1,7 +1,11 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import Cart from "../components/Cart";
-
-
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
@@ -40,6 +44,11 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     (quantity, item) => item.quantity + quantity,
     0
   );
+
+  useEffect(() => {
+    const convertData = JSON.stringify(cartItems);
+    localStorage.setItem("cartItem", convertData);
+  }, [cartItems]);
 
   function getItemQuantity(id: number) {
     return cartItems.find((item) => item.id === id)?.quantity || 0;

@@ -1,65 +1,21 @@
-import { Col, Drawer, Row } from "antd";
+import { Col, Drawer, Radio, Row } from "antd";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import CartItem from "./CartItem";
 import Items from "../data/items.json";
+import { useState } from "react";
 
 type ShoppingCartProps = {
   isOpen: boolean;
 };
 
-interface Discount {
-  type:
-    | "FixedAmountCoupon"
-    | "PercentageCoupon"
-    | "CategoryPercentage"
-    | "PointsOnTop"
-    | "Seasonal";
-  value: number;
-  category?: string;
-  threshold?: number;
-  discountAmount?: number;
-}
-
-const applyDiscounts = (cart: CartItem[], discounts: Discount[]): number => {
-  let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  for (const discount of discounts) {
-    switch (discount.type) {
-      case "FixedAmountCoupon":
-        total -= Math.min(discount.value, total);
-        break;
-      case "PercentageCoupon":
-        total -= (discount.value / 100) * total;
-        break;
-      case "CategoryPercentage":
-        const categoryItems = cart.filter(
-          (item) => item.category === discount.category
-        );
-        const categoryTotal = categoryItems.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0
-        );
-        total -= (discount.value / 100) * categoryTotal;
-        break;
-      case "PointsOnTop":
-        total -= Math.min(discount.value, 0.2 * total);
-        break;
-      case "Seasonal":
-        total -= Math.min(
-          Math.floor(total / discount.threshold) * discount.discountAmount,
-          total
-        );
-        break;
-      default:
-        break;
-    }
-  }
-
-  return Math.max(total, 0);
-};
-
 const Cart = ({ isOpen }: ShoppingCartProps) => {
   const { closeCart, cartItems } = useShoppingCart();
+  const [fixed, setFixed] = useState("");
+
+  const handleRadioChange = (e) => {
+    setFixed(e.target.value);
+  };
+  console.log(fixed);
 
   return (
     <Drawer width={500} title="Shopping Cart" open={isOpen} onClose={closeCart}>
@@ -75,7 +31,10 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
             marginTop: "8px",
           }}
         >
-          Discounted
+          <Col>Discounted</Col>
+          <Radio.Group onChange={handleRadioChange}>
+            <Radio value={"fixed"}></Radio>
+          </Radio.Group>
         </Col>
 
         <Col
@@ -90,7 +49,11 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
           Total : {"   "}
           {cartItems.reduce((total, CartItem) => {
             const item = Items.find((i) => i.id === CartItem.id);
-            return total + (item?.price || 0) * CartItem.quantity;
+            if (fixed === "fixed") {
+              return total + (item?.price || 0) * CartItem.quantity - 4;
+            } else {
+              return total + (item?.price || 0) * CartItem.quantity;
+            }
           }, 0)}
           $
         </Col>
