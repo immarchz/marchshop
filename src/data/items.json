@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Barebone Keyboard",
+    "price": 200,
+    "imgUrl": "https://gamingplanet.store/wp-content/uploads/2022/07/WeChat-Screenshot_20220729180752.png"
+  },
+  {
+    "id": 2,
+    "name": "Keycaps",
+    "price": 50,
+    "imgUrl": "https://goblintechkeys.com/cdn/shop/products/cinnamoroll-keycaps-694629.jpg?v=1690535828&width=1445"
+  },
+  {
+    "id": 3,
+    "name": "Switches",
+    "price": 6.99,
+    "imgUrl": "https://speedcom.co.th/uploads/userfiles/images/Speedcom.co.th/Blog/cherry-mx-red.jpg"
+  }
+]
