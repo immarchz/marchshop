@@ -1,20 +1,37 @@
 [
   {
     "id": 1,
-    "name": "Barebone Keyboard",
+    "name": "KBD BELLA 75",
     "price": 200,
-    "imgUrl": "https://gamingplanet.store/wp-content/uploads/2022/07/WeChat-Screenshot_20220729180752.png"
+    "imgUrl": "https://gamingplanet.store/wp-content/uploads/2022/07/WeChat-Screenshot_20220729180752.png",
+    "category": "keyboard"
   },
   {
     "id": 2,
     "name": "Keycaps",
     "price": 50,
-    "imgUrl": "https://goblintechkeys.com/cdn/shop/products/cinnamoroll-keycaps-694629.jpg?v=1690535828&width=1445"
+    "imgUrl": "https://goblintechkeys.com/cdn/shop/products/cinnamoroll-keycaps-694629.jpg?v=1690535828&width=1445",
+    "category": "keycap"
   },
   {
     "id": 3,
-    "name": "Switches",
+    "name": "Cherry Red Switch",
     "price": 6.99,
-    "imgUrl": "https://speedcom.co.th/uploads/userfiles/images/Speedcom.co.th/Blog/cherry-mx-red.jpg"
+    "imgUrl": "https://speedcom.co.th/uploads/userfiles/images/Speedcom.co.th/Blog/cherry-mx-red.jpg",
+    "category": "switch"
+  },
+  {
+    "id": 4,
+    "name": "Otemou Red Switch",
+    "price": 3.99,
+    "imgUrl": "https://cdn.shopify.com/s/files/1/0012/4957/4961/files/redragon_k530_with_red_switches_d16833b8-27ac-4da3-bd48-c16893affa03_480x480.jpg?v=1677579195",
+    "category": "switch"
+  },
+  {
+    "id": 5,
+    "name": "Keychron V4 Barebone",
+    "price": 180,
+    "imgUrl": "https://ae01.alicdn.com/kf/Sf1512fb7a110449189c037f8b92f6d0f7.png_640x640.png_.webp",
+    "category": "switch"
   }
 ]

@@ -1,4 +1,4 @@
-import { Button, Col, Image, Row } from "antd";
+import { Button, Col, Divider, Image, Row } from "antd";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import Items from "../data/items.json";
 type CartItemProps = {
@@ -7,7 +7,12 @@ type CartItemProps = {
 };
 
 const CartItem = ({ id, quantity }: CartItemProps) => {
-  const { removeFromCart } = useShoppingCart();
+  const {
+    getItemQuantity,
+    increaseCartQuantity,
+    decreaseCartQuantity,
+    removeFromCart,
+  } = useShoppingCart();
   const item = Items.find((i) => i.id === id);
   if (item == null) return null;
 
@@ -26,17 +31,14 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
         </Col>
 
         <Col>
-          <Col>
-            {item.name}{" "}
-            {quantity > 1 && (
-              <span
-                style={{
-                  color: "gray",
-                }}
-              >
-                x{quantity}
-              </span>
-            )}
+          <Col
+            style={{
+              fontWeight: "bold",
+              fontSize: "5",
+              marginTop: "8px",
+            }}
+          >
+            {item.name}
           </Col>
           <Col span={24}>{item.price} $ </Col>
           <Col>Total Price: {item.price * quantity} $</Col>
@@ -52,7 +54,26 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
             </Button>
           </Col>
         </Col>
+        <Col>
+          <Col>
+            {quantity > 0 && (
+              <span
+                style={{
+                  color: "gray",
+                }}
+              >
+                Amount : {quantity}
+              </span>
+            )}
+            <Col>
+              <Button onClick={() => decreaseCartQuantity(id)}>-</Button>
+              <Button onClick={() => increaseCartQuantity(id)}>+</Button>
+            </Col>
+          </Col>
+        </Col>
       </Row>
+
+      <Divider />
     </>
   );
 };

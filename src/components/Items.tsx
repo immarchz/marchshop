@@ -6,6 +6,7 @@ type ItemsProps = {
   name: string;
   price: number;
   imgUrl: string;
+  category: string;
 };
 
 export function MyItems({ id, name, price, imgUrl }: ItemsProps) {
@@ -34,18 +35,17 @@ export function MyItems({ id, name, price, imgUrl }: ItemsProps) {
         <Col>{name}</Col>
         <Col>{price}</Col>
         <Col span={24}>
-          {quantity === 0 ? (
-            <Button
-              onClick={() => increaseCartQuantity(id)}
-              style={{
-                width: "100%",
-              }}
-            >
-              Add Item
-            </Button>
-          ) : (
-            <div>
-              <Row
+          <Button
+            onClick={() => increaseCartQuantity(id)}
+            style={{
+              width: "100%",
+            }}
+          >
+            Add Item
+          </Button>
+
+          <div>
+            {/* <Row
                 justify={"center"}
                 style={{
                   textAlign: "center",
@@ -63,9 +63,8 @@ export function MyItems({ id, name, price, imgUrl }: ItemsProps) {
                     Remove from cart
                   </Button>
                 </Col>
-              </Row>
-            </div>
-          )}
+              </Row> */}
+          </div>
         </Col>
       </Row>
     </Card>

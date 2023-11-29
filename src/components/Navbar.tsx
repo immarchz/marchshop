@@ -8,7 +8,14 @@ const Navbar = () => {
   const { openCart, cartQuantity } = useShoppingCart();
   return (
     <div>
-      <Row justify={"end"}>
+      <Row justify={"space-between"}>
+        <Image
+          src="https://logowik.com/content/uploads/images/shop-app6999.jpg"
+          style={{
+            height: "60px",
+            width: "80px",
+          }}
+        />
         {cartQuantity > 0 && (
           <Button
             onClick={openCart}

@@ -1,9 +1,7 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import Cart from "../components/Cart";
 
-type ShoppingCartProps = {
-  isOpen: boolean;
-};
+
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
