@@ -13,15 +13,44 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
   const { closeCart, cartItems } = useShoppingCart();
   const [value, setValue] = useState<CheckboxValueType[]>([]);
 
+  const [inputValue, setInputValue] = useState<string>("");
+
   const [fixedDisabled, setFixedDisabled] = useState(false);
   const [percentDisabled, setPercentDisabled] = useState(false);
-  const [categoryDisabled, setCategoryDisabled] = useState(false);
+  const [categoryDisabled, setCategoryDisabled] = useState("");
+  const [pointDisabled, setPointDisabled] = useState(false);
+
+  console.log("inputValue", inputValue);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const isNumericKey = /^[0-9]$/.test(e.key);
+    const isBackspaceOrDelete = e.key === "Backspace" || e.key === "Delete";
+
+    if (!isNumericKey && !isBackspaceOrDelete) {
+      e.preventDefault();
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    if (parseInt(inputValue) > 20) {
+      alert("Input value is greater than 20!");
+
+      setInputValue("");
+    } else {
+      console.log("Collected data:", inputValue);
+      setInputValue(e.target.value);
+    }
+
+    setCategoryDisabled(e.target.value);
+  };
 
   const handleCheckboxChange = (checkedValues: CheckboxValueType[]) => {
     setValue(checkedValues);
 
     setFixedDisabled(checkedValues.includes("percent"));
     setPercentDisabled(checkedValues.includes("fixed"));
+    setPointDisabled(checkedValues.includes("percentCategory"));
   };
   // console.log(value);
 
@@ -35,6 +64,7 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
     {
       label: "Percentage Discount By Item Category",
       value: "percentCategory",
+      disabled: categoryDisabled,
     },
     { label: "Seasonal discount", value: "seasonal" },
   ];
@@ -55,13 +85,23 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
           >
             Discounted
           </Col>
-          <Col>
+          <Col
+            style={{
+              marginBottom: "3px",
+            }}
+          >
             <Checkbox.Group options={options} onChange={handleCheckboxChange} />
           </Col>
-          <Row>
-            <Col>Discount by pont</Col>
+          <Row gutter={[8, 8]} justify={"start"}>
+            <Col>Discount by point</Col>
             <Col>
-              <Input />
+              <Input
+                placeholder=""
+                onChange={handleInputChange}
+                value={inputValue}
+                onKeyDown={handleKeyDown}
+                disabled={pointDisabled}
+              />
             </Col>
           </Row>
         </Col>
@@ -92,22 +132,29 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
             const seasonal_x_threshold = 100;
 
             if (value.includes("fixed")) {
-              discountAmount = fixed_discount;
-            } else if (value.includes("percent")) {
-              discountAmount = (itemTotal * percent_discount) / 100;
-            } else if (value.includes("percentCategory") && item?.category) {
+              discountAmount += fixed_discount;
+            }
+            if (value.includes("percent")) {
+              discountAmount += (itemTotal * percent_discount) / 100;
+            }
+            if (value.includes("percentCategory") && item?.category) {
               const categoryDiscount = categoryDiscounts[item.category] || 0;
-              discountAmount = (itemTotal * categoryDiscount) / 100;
-            } else if (
+              discountAmount +=
+                ((itemTotal - discountAmount) * categoryDiscount) / 100;
+            }
+            if (parseInt(inputValue) <= 20) {
+              discountAmount +=
+                (itemTotal - discountAmount) * (parseInt(inputValue) / 100);
+            }
+            if (
               value.includes("seasonal") &&
               itemTotal >= seasonal_x_threshold * Math.floor(itemTotal / 100)
             ) {
-              discountAmount =
-                Math.floor(itemTotal / seasonal_x_threshold) *
-                seasonal_discount;
+              discountAmount +=
+                Math.floor(
+                  (itemTotal - discountAmount) / seasonal_x_threshold
+                ) * seasonal_discount;
               console.log("");
-            } else {
-              discountAmount = 0;
             }
             console.log("discount", discountAmount);
             return total + itemTotal - discountAmount;
