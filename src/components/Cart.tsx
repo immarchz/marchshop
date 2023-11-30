@@ -1,4 +1,4 @@
-import { Checkbox, Col, Drawer, Radio, Row } from "antd";
+import { Checkbox, Col, Drawer, Input, Radio, Row } from "antd";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import CartItem from "./CartItem";
 import Items from "../data/items.json";
@@ -12,17 +12,30 @@ type ShoppingCartProps = {
 const Cart = ({ isOpen }: ShoppingCartProps) => {
   const { closeCart, cartItems } = useShoppingCart();
   const [value, setValue] = useState<CheckboxValueType[]>([]);
-  const [seasonalDiscountCount, setSeasonalDiscountCount] = useState(0);
+
+  const [fixedDisabled, setFixedDisabled] = useState(false);
+  const [percentDisabled, setPercentDisabled] = useState(false);
+  const [categoryDisabled, setCategoryDisabled] = useState(false);
 
   const handleCheckboxChange = (checkedValues: CheckboxValueType[]) => {
     setValue(checkedValues);
+
+    setFixedDisabled(checkedValues.includes("percent"));
+    setPercentDisabled(checkedValues.includes("fixed"));
   };
   // console.log(value);
 
   const options = [
-    { label: "Fixed Price Discount", value: "fixed" },
-    { label: "Percent Price Discount", value: "percent" },
-    { label: "Percentage Discount By Item Category", value: "percentCategory" },
+    { label: "Fixed Price Discount", value: "fixed", disabled: fixedDisabled },
+    {
+      label: "Percent Price Discount",
+      value: "percent",
+      disabled: percentDisabled,
+    },
+    {
+      label: "Percentage Discount By Item Category",
+      value: "percentCategory",
+    },
     { label: "Seasonal discount", value: "seasonal" },
   ];
 
@@ -42,7 +55,15 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
           >
             Discounted
           </Col>
-          <Checkbox.Group options={options} onChange={handleCheckboxChange} />
+          <Col>
+            <Checkbox.Group options={options} onChange={handleCheckboxChange} />
+          </Col>
+          <Row>
+            <Col>Discount by pont</Col>
+            <Col>
+              <Input />
+            </Col>
+          </Row>
         </Col>
 
         <Col
@@ -59,7 +80,6 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
             const item = Items.find((i) => i.id === CartItem.id);
             const itemTotal = (item?.price || 0) * CartItem.quantity;
 
-            console.log("seasonalDiscountCount", seasonalDiscountCount);
             let discountAmount = 0;
             const fixed_discount = 4;
             const percent_discount = 15;
@@ -70,7 +90,6 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
             };
             const seasonal_discount = 10;
             const seasonal_x_threshold = 100;
-            const seasonal_y_increment = 10;
 
             if (value.includes("fixed")) {
               discountAmount = fixed_discount;
@@ -81,15 +100,14 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
               discountAmount = (itemTotal * categoryDiscount) / 100;
             } else if (
               value.includes("seasonal") &&
-              itemTotal >= seasonal_x_threshold * (seasonalDiscountCount + 1)
+              itemTotal >= seasonal_x_threshold * Math.floor(itemTotal / 100)
             ) {
               discountAmount =
-                seasonal_discount +
-                seasonalDiscountCount * seasonal_y_increment;
-              setSeasonalDiscountCount((prevCount) => prevCount + 1);
-              console.log("seasonalDiscount", seasonalDiscountCount);
+                Math.floor(itemTotal / seasonal_x_threshold) *
+                seasonal_discount;
+              console.log("");
             } else {
-              // discountAmount = 1;
+              discountAmount = 0;
             }
             console.log("discount", discountAmount);
             return total + itemTotal - discountAmount;
