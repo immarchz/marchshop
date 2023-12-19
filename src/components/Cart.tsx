@@ -38,7 +38,7 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
 
       setInputValue("");
     } else {
-      console.log("Collected data:", inputValue);
+      console.log("Point Discount:", inputValue);
       setInputValue(e.target.value);
     }
 
@@ -157,7 +157,7 @@ const Cart = ({ isOpen }: ShoppingCartProps) => {
               console.log("");
             }
             console.log("discount", discountAmount);
-            return total + itemTotal - discountAmount;
+            return total + itemTotal - discountAmount.toFixed(2);
           }, 0)}
           $
         </Col>

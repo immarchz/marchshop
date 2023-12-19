@@ -10,14 +10,7 @@ type ItemsProps = {
 };
 
 export function MyItems({ id, name, price, imgUrl }: ItemsProps) {
-  const {
-    getItemQuantity,
-    increaseCartQuantity,
-    decreaseCartQuantity,
-    removeFromCart,
-  } = useShoppingCart();
-
-  const quantity = getItemQuantity(id);
+  const { increaseCartQuantity } = useShoppingCart();
 
   return (
     <Card
@@ -43,28 +36,6 @@ export function MyItems({ id, name, price, imgUrl }: ItemsProps) {
           >
             Add Item
           </Button>
-
-          <div>
-            {/* <Row
-                justify={"center"}
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                <Col span={8}>
-                  <Button onClick={() => decreaseCartQuantity(id)}>-</Button>
-                </Col>
-                <Col span={8}>{quantity}</Col>
-                <Col span={8}>
-                  <Button onClick={() => increaseCartQuantity(id)}>+</Button>
-                </Col>
-                <Col span={24}>
-                  <Button onClick={() => removeFromCart(id)}>
-                    Remove from cart
-                  </Button>
-                </Col>
-              </Row> */}
-          </div>
         </Col>
       </Row>
     </Card>

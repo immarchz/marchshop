@@ -47,7 +47,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   useEffect(() => {
     const convertData = JSON.stringify(cartItems);
+    console.log("cartItems", cartItems);
     localStorage.setItem("cartItem", convertData);
+    console.log("convertData", convertData);
   }, [cartItems]);
 
   function getItemQuantity(id: number) {
@@ -88,6 +90,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   function removeFromCart(id: number) {
     setCartItems((currItems) => {
+      console.log("id", id);
       return currItems.filter((item) => item.id !== id);
     });
   }
